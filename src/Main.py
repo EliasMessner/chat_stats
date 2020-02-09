@@ -1,7 +1,7 @@
 from src.visualization import *
 from src.message_handler import *
 from src.analytics import *
-import src.constants as Constants
+import src.constants as constants
 
 
 def main():
@@ -46,9 +46,9 @@ def main():
               get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=1))
         print("\nAverage response time (minutes): %.2f" % (get_average_response_time(all_messages, user=p)/60))
 
-        plot_word_cloud(get_all_message_contents_as_string(filtered_messages), stopwords=stopwords_de, mask_path=None, caption="Word Cloud: " + p)
-        plot_barh_dict(get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=15), caption="Favorite words of " + p)
-        plot_barh_dict(get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=15, stop_words=[]), caption="Favorite words of " + p + " (incl stop words)")
+        # plot_word_cloud(get_all_message_contents_as_string(filtered_messages), stopwords=stopwords_de, mask_path=None, caption="Word Cloud: " + p)
+        # plot_barh_dict(get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=15), caption="Favorite words of " + p)
+        # plot_barh_dict(get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=15, stop_words=[]), caption="Favorite words of " + p + " (incl stop words)")
 
     print("\n\n\nTogether stats: ")
     print("\nTotal messages sent:", len(all_messages))
@@ -64,7 +64,7 @@ def main():
           "\nmessages sent on this day: ", get_message_count_on_day(all_messages, most_active_day))
 
     print("\n\nNumber of conversations (Conversation means a subsequent message was sent within ",
-          Constants.conversation_max_message_time_in_minutes, " minutes): ",
+          constants.conversation_max_message_time_in_minutes, " minutes): ",
           len(get_all_conversations(all_messages)))
 
     longest_convo_by_time = get_longest_conversation_by_duration(all_messages)
@@ -84,10 +84,10 @@ def main():
           "\n    messages: ", (len(longest_convo_by_messages)))
 
     print("\n\nNumber of on-screen-conversations (on-screen-conversation means a subsequent message was sent within ",
-          Constants.conversation_on_screen_max_message_time_in_minutes, " minutes): ",
-          len(get_all_conversations(all_messages, allowed_minutes=Constants.conversation_on_screen_max_message_time_in_minutes)))
+          constants.conversation_on_screen_max_message_time_in_minutes, " minutes): ",
+          len(get_all_conversations(all_messages, allowed_minutes=constants.conversation_on_screen_max_message_time_in_minutes)))
 
-    longest_convo_by_time = get_longest_conversation_by_duration(all_messages, allowed_minutes=Constants.conversation_on_screen_max_message_time_in_minutes)
+    longest_convo_by_time = get_longest_conversation_by_duration(all_messages, allowed_minutes=constants.conversation_on_screen_max_message_time_in_minutes)
     print("\nlongest on-screen-conversation by time:"
           "\n    from ", longest_convo_by_time[0].date_time,
           "\n    to ", longest_convo_by_time[-1].date_time,
@@ -95,7 +95,7 @@ def main():
           " minutes)",
           "\n    messages: ", (len(longest_convo_by_time)))
 
-    longest_convo_by_messages = get_longest_conversation_by_messages(all_messages, allowed_minutes=Constants.conversation_on_screen_max_message_time_in_minutes)
+    longest_convo_by_messages = get_longest_conversation_by_messages(all_messages, allowed_minutes=constants.conversation_on_screen_max_message_time_in_minutes)
     print("\nlongest on-screen-conversation by number of messages exchanged:"
           "\n    from ", longest_convo_by_messages[0].date_time,
           "\n    to ", longest_convo_by_messages[-1].date_time,
@@ -104,6 +104,7 @@ def main():
           " minutes)",
           "\n    messages: ", (len(longest_convo_by_messages)))
 
+    '''
     plot_word_cloud(get_all_message_contents_as_string(all_messages), stopwords=stopwords_de, mask_path=mask_path, caption="Word Cloud")
     plot_barv_dict(get_daily_activity(all_messages, exclude_non_active_days=False), xtick_number=10)
     plot_pie_chart(get_participation_by_messages(all_messages), caption="Participation by messages")
@@ -111,7 +112,7 @@ def main():
     plot_pie_chart(get_participation_by_characters(all_messages), caption="Participation by characters")
     plot_barv_dict(get_activity_per_week_day(all_messages), caption="Activity per weekday")
     plot_barv_dict(get_activity_per_hour(all_messages), caption="Activity per hour")
-
+    '''
     plt.show()
 
 

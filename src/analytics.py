@@ -6,9 +6,10 @@ import re
 import string
 import itertools
 from src.Message import Message
-import src.constants as Constants
+import src.constants as constants
 from src.message_handler import contains_hyperlink
 from calendar import day_name
+from collections import Counter
 
 
 # averages
@@ -137,13 +138,8 @@ def get_word_frequency(text: str, case_sensitive: bool = False, stop_after: int 
                           encoding="utf8").read().split("\n")
     if not case_sensitive:
         text = text.lower()
-    freq_dict = {}
     words = extract_words(text, stop_words = stop_words)
-    for word in words:
-        if not word in freq_dict:
-            freq_dict[word] = 1
-        else:
-            freq_dict[word] = freq_dict[word] + 1
+    freq_dict = Counter(words)
     if sort:
         freq_dict = {k: v for k, v in sorted(freq_dict.items(), key=lambda item: item[1], reverse=True)}
     if stop_after is not None:
@@ -177,12 +173,7 @@ def get_daily_activity(message_list: list, exclude_non_active_days: bool = True)
     :return: dict with all dates when messages where sent as keys, and the number of messages sent on each day as values
     :rtype: dict
     """
-    result = {}
-    for msg in message_list:
-        if not msg.date_time.date() in result:
-            result[msg.date_time.date()] = 1
-        else:
-            result[msg.date_time.date()] += 1
+    result = Counter(msg.date_time.date() for msg in message_list)
     if not exclude_non_active_days:
         # setting all non listed but within time frame days to 0
         current_day = min(result)
@@ -216,11 +207,7 @@ def get_user_response_dict(message_list: list):
 
 
 def get_message_count_on_day(message_list: list, day: date):
-    count = 0
-    for msg in message_list:
-        if msg.date_time.date() == day:
-            count += 1
-    return count
+    return Counter(msg.date_time.date() for msg in message_list)[day]
 
 
 def get_all_conversations(message_list: list, allowed_minutes: int = None):
@@ -231,7 +218,7 @@ def get_all_conversations(message_list: list, allowed_minutes: int = None):
     result = []
     current_convo = []
     if allowed_minutes is None:
-        allowed_minutes = Constants.conversation_max_message_time_in_minutes
+        allowed_minutes = constants.conversation_max_message_time_in_minutes
     for msg in sorted(message_list, key=lambda x: x.date_time):
         if current_convo == [] or (msg.date_time - current_convo[-1].date_time).total_seconds() <= allowed_minutes * 60:
             current_convo.append(msg)
@@ -249,13 +236,7 @@ def get_participation_by_messages(message_list: list):
     :return: users and their respective total amounts of messages contributed to the chat
     :rtype: dict
     """
-    result = {}
-    for msg in message_list:
-        if msg.sender not in result:
-            result[msg.sender] = 1
-        else:
-            result[msg.sender] += 1
-    return result
+    return Counter(msg.sender for msg in message_list)
 
 
 def get_participation_by_words(message_list: list):
