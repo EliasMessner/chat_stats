@@ -74,22 +74,22 @@ def get_longest_message(message_list: list):
     return max(message_list, key=lambda x: len(x.content))
 
 
-def get_longest_conversation_by_messages(message_list: list, allowed_seconds: int = None):
+def get_longest_conversation_by_messages(message_list: list, allowed_minutes: int = None):
     """
     :param message_list: list of messages
     :type message_list: list
     :return: the longest conversation that took place (by number of messages sent).
     :rtype: list
     """
-    return max(get_all_conversations(message_list, allowed_seconds), key=lambda x: len(x))
+    return max(get_all_conversations(message_list, allowed_minutes), key=lambda x: len(x))
 
 
-def get_longest_conversation_by_duration(message_list: list, allowed_seconds: int = None):
+def get_longest_conversation_by_duration(message_list: list, allowed_minutes: int = None):
     """
     :return: the longest conversation that took place (by time difference from first to last message).
     :rtype: list
     """
-    return max(get_all_conversations(message_list, allowed_seconds), key=lambda x: (max(x, key=lambda n: n.date_time).date_time
+    return max(get_all_conversations(message_list, allowed_minutes), key=lambda x: (max(x, key=lambda n: n.date_time).date_time
                                                                    - min(x, key=lambda m: m.date_time).date_time))
 
 

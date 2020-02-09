@@ -87,7 +87,7 @@ def main():
           Constants.conversation_on_screen_max_message_time_in_minutes, " minutes): ",
           len(get_all_conversations(all_messages, allowed_minutes=Constants.conversation_on_screen_max_message_time_in_minutes)))
 
-    longest_convo_by_time = get_longest_conversation_by_duration(all_messages, allowed_seconds=Constants.conversation_on_screen_max_message_time_in_minutes)
+    longest_convo_by_time = get_longest_conversation_by_duration(all_messages, allowed_minutes=Constants.conversation_on_screen_max_message_time_in_minutes)
     print("\nlongest on-screen-conversation by time:"
           "\n    from ", longest_convo_by_time[0].date_time,
           "\n    to ", longest_convo_by_time[-1].date_time,
@@ -95,7 +95,7 @@ def main():
           " minutes)",
           "\n    messages: ", (len(longest_convo_by_time)))
 
-    longest_convo_by_messages = get_longest_conversation_by_messages(all_messages, allowed_seconds=Constants.conversation_on_screen_max_message_time_in_minutes)
+    longest_convo_by_messages = get_longest_conversation_by_messages(all_messages, allowed_minutes=Constants.conversation_on_screen_max_message_time_in_minutes)
     print("\nlongest on-screen-conversation by number of messages exchanged:"
           "\n    from ", longest_convo_by_messages[0].date_time,
           "\n    to ", longest_convo_by_messages[-1].date_time,
