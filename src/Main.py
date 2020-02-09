@@ -6,11 +6,11 @@ import src.constants as Constants
 
 def main():
 
-    chat_path = r"C:\Users\elias\PycharmProjects\wordCloudProject\resources\fam_group.txt"
-    # chat_path = r"C:\Users\elias\PycharmProjects\wordCloudProject\resources\WhatsApp Chat with S.txt"
-    # chat_path = r"C:\Users\elias\PycharmProjects\wordCloudProject\resources\groupChat.txt"
-    # chat_path = r"C:\Users\elias\PycharmProjects\wordCloudProject\resources\groupChat_full_de.txt"
-    # chat_path = r"C:\Users\elias\PycharmProjects\wordCloudProject\resources\WhatsApp Chat with Sis.txt"
+    # chat_path = r"C:\Users\elias\Desktop\WA chats\fam_group.txt"
+    chat_path = r"C:\Users\elias\Desktop\WA chats\WhatsApp Chat with S.txt"
+    # chat_path = r"C:\Users\elias\Desktop\WA chats\groupChat.txt"
+    # chat_path = r"C:\Users\elias\Desktop\WA chats\groupChat_full_de.txt"
+    # chat_path = r"C:\Users\elias\Desktop\WA chats\WhatsApp Chat with Sis.txt"
     # chat_path = r"C:\Users\elias\Downloads\WhatsApp Chat with Rick Justin Junge.txt"
 
     # Constants.global_lang = "de"

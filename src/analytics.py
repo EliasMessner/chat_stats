@@ -18,18 +18,31 @@ def get_average_word_count_per_message(message_list: list):
     return total_word_count / len(message_list)
 
 
-def get_average_word_count_per_day(message_list: list):
+def get_average_word_count_per_day(message_list: list, user: str = None):
+    """
+    :param message_list: if user is specified, message list should be the entire list of messages in this chat,
+        especially for group or in chats where the user has not participated from beginning to end
+    :param user: optional, the user the average word count is wanted for.
+        if not specified all users in this chat are taken in account
+    :rtype: float
+    """
     message_list_sorted_by_date = sorted(message_list, key=lambda x: x.date_time)
     days_texted = (message_list_sorted_by_date[-1].date_time - message_list_sorted_by_date[0].date_time).days + 1
-    total_word_count = len(extract_words(get_all_message_contents_as_string(message_list)))
+    total_word_count = len(extract_words(get_all_message_contents_as_string(filter_messages(message_list, user))))
     return total_word_count / days_texted
 
 
 def get_average_message_count_per_day(message_list: list, user: str = None):
+    """
+    :param message_list: if user is specified, message list should be the entire list of messages in this chat,
+        especially for group or in chats where the user has not participated from beginning to end
+    :param user: optional, the user the average message count is wanted for.
+        if not specified all users in this chat are taken in account
+    :rtype: float
+    """
     message_list_sorted_by_date = sorted(message_list, key=lambda x: x.date_time)
     days_texted = (message_list_sorted_by_date[-1].date_time - message_list_sorted_by_date[0].date_time).days + 1
-    filtered_messages = filter_messages(message_list, sender=user) if user is not None else message_list
-    return len(filtered_messages) / days_texted
+    return len(filter_messages(message_list, sender=user)) / days_texted
 
 
 def get_average_word_length(message_list: list):
