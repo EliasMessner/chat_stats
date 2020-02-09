@@ -41,14 +41,14 @@ def main():
               "\nmessages sent on this day:", get_message_count_on_day(filtered_messages, most_active_day))
 
         print("\nFavorite word:",
-              get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=1, stop_words=["media", "ommitted"]))
+              get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=1, stop_words=[]))
         print("\nFavorite word (without stop words):",
               get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=1))
         print("\nAverage response time (minutes): %.2f" % (get_average_response_time(all_messages, user=p)/60))
 
         plot_word_cloud(get_all_message_contents_as_string(filtered_messages), stopwords=stopwords_de, mask_path=None, caption="Word Cloud: " + p)
         plot_barh_dict(get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=15), caption="Favorite words of " + p)
-        plot_barh_dict(get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=15, stop_words=["media", "omitted"]), caption="Favorite words of " + p + " (incl stop words)")
+        plot_barh_dict(get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=15, stop_words=[]), caption="Favorite words of " + p + " (incl stop words)")
 
     print("\n\n\nTogether stats: ")
     print("\nTotal messages sent:", len(all_messages))
