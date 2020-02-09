@@ -4,6 +4,7 @@ from os import path
 from PIL import Image
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 import matplotlib.pyplot as plt
+import matplotlib.font_manager
 from src.analytics import *
 
 
@@ -63,7 +64,9 @@ def plot_barv_dict(given_dict: dict, caption: str = None, xtick_number: int = No
     return plt.figure()
 
 
-def plot_pie_chart(data: dict, caption: str = None):
+def plot_pie_chart(data: dict, caption: str = None, sort: bool = True):
+    if sort:
+        data = {k: v for k, v in sorted(data.items(), key=lambda item: item[1])}
     plt.pie(x=data.values(), labels=data.keys(), autopct="%1.2f%%", startangle=90)
     if caption is not None:
         plt.suptitle(caption, fontsize=14, fontweight='bold')

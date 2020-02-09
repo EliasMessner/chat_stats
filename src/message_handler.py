@@ -4,7 +4,6 @@ import src.constants as constants
 import emoji
 from src.analytics import *
 from collections import Counter
-import unicodedata
 
 
 def get_all_messages(path: str, stop_after: int = None, separator_regex: str = None, date_format: str = None,
@@ -50,14 +49,6 @@ def parse_message(message_as_string: str, regex: str, date_format: str):
 def contains_hyperlink(string: str):
     url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+] | [! * \(\),] | (?: %[0-9a-fA-F][0-9a-fA-F]))+', string)
     return len(url) != 0
-
-
-def extract_emojis(text):
-    return [c for c in text if c in emoji.EMOJI_UNICODE.values() and not unicodedata.name(c).startswith("EMOJI MODIFIER")]
-
-
-def count_emojis(emoji_list):
-    return Counter(emoji_list)
 
 
 # some tests:

@@ -5,6 +5,8 @@ from datetime import *
 import re
 import string
 import itertools
+import emoji
+import unicodedata
 from src.Message import Message
 import src.constants as constants
 from src.message_handler import contains_hyperlink
@@ -295,6 +297,14 @@ def get_activity_per_hour(message_list: list):
         else:
             result[hour] += 1
     return {k: v for k, v in sorted(result.items(), key=lambda item: item[0])}
+
+
+def extract_emojis(text):
+    return [c for c in text if c in emoji.EMOJI_UNICODE.values() and not unicodedata.name(c).startswith("EMOJI MODIFIER")]
+
+
+def count_emojis(emoji_list):
+    return Counter(emoji_list)
 
 
 def concatenate_list_data(given_list: list):

@@ -45,10 +45,13 @@ def main():
         print("\nFavorite word (without stop words):",
               get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=1))
         print("\nAverage response time (minutes): %.2f" % (get_average_response_time(all_messages, user=p)/60))
+        emoji_count = count_emojis(extract_emojis(get_all_message_contents_as_string(filtered_messages)))
+        print("\nFavorite Emojis: ", emoji_count.most_common(5))
 
         # plot_word_cloud(get_all_message_contents_as_string(filtered_messages), stopwords=stopwords_de, mask_path=None, caption="Word Cloud: " + p)
         # plot_barh_dict(get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=15), caption="Favorite words of " + p)
         # plot_barh_dict(get_word_frequency(get_all_message_contents_as_string(filtered_messages), stop_after=15, stop_words=[]), caption="Favorite words of " + p + " (incl stop words)")
+        # plot_pie_chart(dict(emoji_count.most_common(10)), caption="Favorite Emojis of " + p)
 
     print("\n\n\nTogether stats: ")
     print("\nTotal messages sent:", len(all_messages))
@@ -104,15 +107,15 @@ def main():
           " minutes)",
           "\n    messages: ", (len(longest_convo_by_messages)))
 
-    '''
-    plot_word_cloud(get_all_message_contents_as_string(all_messages), stopwords=stopwords_de, mask_path=mask_path, caption="Word Cloud")
-    plot_barv_dict(get_daily_activity(all_messages, exclude_non_active_days=False), xtick_number=10)
-    plot_pie_chart(get_participation_by_messages(all_messages), caption="Participation by messages")
-    plot_pie_chart(get_participation_by_words(all_messages), caption="Participation by words")
-    plot_pie_chart(get_participation_by_characters(all_messages), caption="Participation by characters")
-    plot_barv_dict(get_activity_per_week_day(all_messages), caption="Activity per weekday")
-    plot_barv_dict(get_activity_per_hour(all_messages), caption="Activity per hour")
-    '''
+
+    # plot_word_cloud(get_all_message_contents_as_string(all_messages), stopwords=stopwords_de, mask_path=mask_path, caption="Word Cloud")
+    # plot_pie_chart(get_participation_by_messages(all_messages), caption="Participation by messages")
+    # plot_pie_chart(get_participation_by_words(all_messages), caption="Participation by words")
+    # plot_pie_chart(get_participation_by_characters(all_messages), caption="Participation by characters")
+    # plot_barv_dict(get_daily_activity(all_messages, exclude_non_active_days=False), xtick_number=10)
+    # plot_barv_dict(get_activity_per_week_day(all_messages), caption="Activity per weekday")
+    # plot_barv_dict(get_activity_per_hour(all_messages), caption="Activity per hour")
+
     plt.show()
 
 
