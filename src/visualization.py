@@ -67,7 +67,15 @@ def plot_barv_dict(given_dict: dict, caption: str = None, xtick_number: int = No
 def plot_pie_chart(data: dict, caption: str = None, sort: bool = True):
     if sort:
         data = {k: v for k, v in sorted(data.items(), key=lambda item: item[1])}
+
+    # matplotlib.rcParams['font.family'] = "seguiemj"
+    # nope, didn't work...
+    # fpath = r"C:\Users\elias\Downloads\emojione-android.ttf"
+    # fprop = matplotlib.font_manager.FontProperties(fname=fpath)
+    # plt.suptitle(Emoji test hihihihi ☺😅🙈😂😍", fontproperties=fprop)
+
     plt.pie(x=data.values(), labels=data.keys(), autopct="%1.2f%%", startangle=90)
+
     if caption is not None:
         plt.suptitle(caption, fontsize=14, fontweight='bold')
     return plt.figure()

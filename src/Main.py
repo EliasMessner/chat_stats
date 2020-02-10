@@ -2,9 +2,12 @@ from src.visualization import *
 from src.message_handler import *
 from src.analytics import *
 import src.constants as constants
+import warnings
 
 
 def main():
+
+    warnings.filterwarnings("ignore")
 
     # chat_path = r"C:\Users\elias\Desktop\WA chats\fam_group.txt"
     chat_path = r"C:\Users\elias\Desktop\WA chats\WhatsApp Chat with S.txt"
