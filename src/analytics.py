@@ -235,9 +235,11 @@ def get_all_conversations(message_list: list, allowed_minutes: int = None):
         if current_convo == [] or (msg.date_time - current_convo[-1].date_time).total_seconds() <= allowed_minutes * 60:
             current_convo.append(msg)
             continue
-        # conversation is finished
-        result.append(current_convo)
-        current_convo = []
+        # we assume at this point that msg is the beginning of a new conversation
+        if len(get_all_participants(current_convo)) > 1:
+            # conversation is finished (if only one participant was involved it is not a conversation)
+            result.append(current_convo)
+        current_convo = [msg]
     if current_convo != []:
         result.append(current_convo)
     return result
