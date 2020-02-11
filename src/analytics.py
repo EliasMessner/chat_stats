@@ -106,10 +106,12 @@ def get_all_participants(message_list: list):
     return participants
 
 
-def get_all_message_contents_as_string(message_list: list):
+def get_all_message_contents_as_string(message_list: list, separate_with_whitespace: bool = True):
     result = ""
     for msg in message_list:
-        result = result + msg.content + " "
+        result += msg.content
+        if separate_with_whitespace:
+            result += " "
     return result
 
 
@@ -136,7 +138,7 @@ def get_word_frequency(text: str, case_sensitive: bool = False, stop_after: int 
     :rtype: dict
     """
     if stop_words is None:
-        stop_words = open(r"C:\Users\elias\PycharmProjects\wordCloudProject\resources\stopwords_de.txt", "r",
+        stop_words = open(r"..\resources\stopwords_de.txt", "r",
                           encoding="utf8").read().split("\n")
     if not case_sensitive:
         text = text.lower()
@@ -170,6 +172,10 @@ def extract_words(text: str, stop_words: list = None):
     return filtered_words
 
 
+def get_total_char_count(message_list: list):
+    return len(get_all_message_contents_as_string(message_list, separate_with_whitespace=False))
+
+
 def get_daily_activity(message_list: list, exclude_non_active_days: bool = True):
     """
     :return: dict with all dates when messages where sent as keys, and the number of messages sent on each day as values
@@ -177,13 +183,17 @@ def get_daily_activity(message_list: list, exclude_non_active_days: bool = True)
     """
     result = Counter(msg.date_time.date() for msg in message_list)
     if not exclude_non_active_days:
-        # setting all non listed but within time frame days to 0
-        current_day = min(result)
-        while current_day <= max(result):
-            if current_day not in result:
-                result[current_day] = 0
-            current_day += timedelta(days=1)
+        fill_non_active_days_with_zero(result)
     return {k: v for k, v in sorted(result.items(), key=lambda item: item[0])}
+
+
+def fill_non_active_days_with_zero(activity_dict: dict):
+    current_day = min(activity_dict)
+    while current_day <= max(activity_dict):
+        if current_day not in activity_dict:
+            activity_dict[current_day] = 0
+        current_day += timedelta(days=1)
+    return activity_dict
 
 
 def get_user_response_dict(message_list: list):
@@ -224,10 +234,10 @@ def get_all_conversations(message_list: list, allowed_minutes: int = None):
     for msg in sorted(message_list, key=lambda x: x.date_time):
         if current_convo == [] or (msg.date_time - current_convo[-1].date_time).total_seconds() <= allowed_minutes * 60:
             current_convo.append(msg)
-        else:
-            if len(get_all_participants(current_convo)) > 1:
-                result.append(current_convo)
-            current_convo = []
+            continue
+        # conversation is finished
+        result.append(current_convo)
+        current_convo = []
     if current_convo != []:
         result.append(current_convo)
     return result
@@ -247,11 +257,11 @@ def get_participation_by_words(message_list: list):
     :rtype: dict
     """
     result = {}
-    for msg in message_list:
-        if msg.sender not in result:
-            result[msg.sender] = len(extract_words(msg.content))
-        else:
-            result[msg.sender] += len(extract_words(msg.content))
+    for p in get_all_participants(message_list):
+        if p not in result:
+            result[p] = len(extract_words(
+                get_all_message_contents_as_string(
+                    filter_messages(message_list, sender=p))))
     return result
 
 
@@ -261,11 +271,9 @@ def get_participation_by_characters(message_list: list):
     :rtype: dict
     """
     result = {}
-    for msg in message_list:
-        if msg.sender not in result:
-            result[msg.sender] = len(msg.content)
-        else:
-            result[msg.sender] += len(msg.content)
+    for p in get_all_participants(message_list):
+        if p not in result:
+            result[p] = get_total_char_count(filter_messages(message_list, sender=p))
     return result
 
 
@@ -274,13 +282,7 @@ def get_activity_per_week_day(message_list: list):
     :return: dictionary with weekdays as keys and total number of messages sent on each day as keys
     :rtype: dict
     """
-    result = {}
-    for msg in message_list:
-        weekday = day_name[msg.date_time.weekday()]
-        if weekday not in result:
-            result[weekday] = 1
-        else:
-            result[weekday] += 1
+    result = Counter(day_name[msg.date_time.weekday()] for msg in message_list)
     return {k: v for k, v in sorted(result.items(), key=lambda item: list(day_name).index(item[0]))}
 
 
@@ -289,13 +291,7 @@ def get_activity_per_hour(message_list: list):
     :return: dictionary with day-hours as keys and total number of messages sent in each hour as keys
     :rtype: dict
     """
-    result = {}
-    for msg in message_list:
-        hour = msg.date_time.hour
-        if hour not in result:
-            result[hour] = 1
-        else:
-            result[hour] += 1
+    result = Counter(msg.date_time.hour for msg in message_list)
     return {k: v for k, v in sorted(result.items(), key=lambda item: item[0])}
 
 
